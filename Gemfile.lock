@@ -45,6 +45,9 @@ GEM
       dm-core (~> 1.2.0)
     dm-migrations (1.2.0)
       dm-core (~> 1.2.0)
+    dm-mysql-adapter (1.2.0)
+      dm-do-adapter (~> 1.2.0)
+      do_mysql (~> 0.10.6)
     dm-serializer (1.2.2)
       dm-core (~> 1.2.0)
       fastercsv (~> 1.5)
@@ -68,6 +71,8 @@ GEM
       uuidtools (~> 2.1)
     dm-validations (1.2.0)
       dm-core (~> 1.2.0)
+    do_mysql (0.10.15)
+      data_objects (= 0.10.15)
     do_sqlite3 (0.10.15)
       data_objects (= 0.10.15)
     eventmachine (1.0.7)
@@ -76,6 +81,7 @@ GEM
     json_pure (1.8.2)
     method_source (0.8.2)
     multi_json (1.11.0)
+    mysql (2.9.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -112,12 +118,15 @@ DEPENDENCIES
   awesome_print
   data_mapper (~> 1.2.0)
   debugger-xml
+  dm-mysql-adapter
   dm-sqlite-adapter (~> 1.2.0)
+  json
+  mysql
   pry
   pry-debugger
   pry-debundle
   rake (~> 10.0.3)
   shotgun
-  sinatra
+  sinatra (~> 1.4.5)
   thin (~> 1.5.1)
   wit (~> 1.0.6)
