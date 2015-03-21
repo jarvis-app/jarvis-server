@@ -29,7 +29,13 @@ get '/query/:query' do
     end
     year = "1=1"
     if entities[:datetime]
-      year = "year = #{entities[:datetime][0][:value][/^\d+/].to_i}"
+      if entities[:datetime][0][:type] == "value"
+        year = "year = #{datetime_to_year(entities[:datetime][0][:value])}"
+      elsif entities[:datetime][0][:type] == "interval"
+        year = "year BETWEEN #{datetime_to_year(entities[:datetime][0][:from][:value])} AND #{datetime_to_year(entities[:datetime][0][:to][:value])}"
+      else
+        halt 400
+      end
     end
     sql_query = <<-EOS
         SELECT SUM(#{output_col})
@@ -46,4 +52,12 @@ end
 
 get '/' do
   return 'hello!'
+end
+
+
+## HELPERS
+helpers do
+  def datetime_to_year(datetime)
+    return datetime[/^\d+/].to_i
+  end
 end
