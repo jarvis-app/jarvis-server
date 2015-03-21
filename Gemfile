@@ -10,9 +10,9 @@ gem "mysql"
 #gem "data_mapper", "~> 1.2.0"
 #gem "dm-mysql-adapter"
 #gem "dm-sqlite-adapter", "~> 1.2.0"
+gem "awesome_print"
 
 group :development, :test do
-  gem "awesome_print"
   gem "shotgun"
   gem "pry"
   gem "pry-debugger"
