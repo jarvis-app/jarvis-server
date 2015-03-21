@@ -32,17 +32,19 @@ get '/query/:query' do
       if entities[:datetime][0][:type] == "value"
         year = "year = #{datetime_to_year(entities[:datetime][0][:value])}"
       elsif entities[:datetime][0][:type] == "interval"
-        year = "year BETWEEN #{datetime_to_year(entities[:datetime][0][:from][:value])} AND #{datetime_to_year(entities[:datetime][0][:to][:value])}"
+        year = "year BETWEEN #{datetime_to_year(entities[:datetime][0][:from][:value])} AND #{datetime_to_year(entities[:datetime][0][:to][:value]) - 1}"
       else
         halt 400
       end
     end
+
     sql_query = <<-EOS
         SELECT SUM(#{output_col})
         FROM #{table}
         WHERE #{disease} AND #{state} AND #{year}
       EOS
     puts sql_query
+
     answer = DB.query(sql_query).fetch_row[0]
     ap answer
   end
