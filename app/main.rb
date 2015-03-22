@@ -2,12 +2,15 @@ require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default, ENV['RACK_ENV'] || :development)
 
+CMD = "curl -H 'Authorization: Bearer 7WPTVWEMQBZOWT4HIHBNOI545DAGPLY5' 'https://api.wit.ai/message?v=20150322&q=%s'"
+
 get '/version' do
   return 'v1'
 end
 
 get '/query/:query' do
-  wit_json = Wit.text_query(params[:query].gsub('Defaults', '').gsub('Default', ''), ACCESS_TOKEN)
+  #wit_json = Wit.text_query(params[:query].gsub('Defaults', '').gsub('Default', ''), ACCESS_TOKEN)
+  wit_json = %x(#{CMD % [params[:query]]})
   ap wit_json
 
   wit = JSON.parse(wit_json, { symbolize_names: true })[:outcomes][0]
