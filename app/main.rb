@@ -57,7 +57,9 @@ get '/query/:query' do
     answer_template = wit[:entities][:metric][0][:metadata]
     answer_template = "%s" if answer_template.empty?
     answer_val = DB.query(sql_query).fetch_row[0]
-    return "No Data found for #{disease} in #{state}" if answer_val.nil? or answer_val.empty?
+    if answer_val.nil? or answer_val.empty?
+      return "No Data found for #{entities[:disease][0][:value]}"
+    end
     answer = answer_template % [answer_val]
     ap answer
 
@@ -81,8 +83,9 @@ get '/query/:query' do
       end
     elsif status == 'introduced'
       date_col = 'intro_date'
-    # elsif status == 'pending'
-    #   date_col ==
+    elsif status == 'pending'
+      date_col == 'intro_date'
+      condition2 = 'status = \'pending\''
     else
       halt 400
     end
@@ -119,6 +122,7 @@ get '/query/:query' do
     ## bill status
   elsif intent == :bill_status
     bill_name = entities[:bill_name] && entities[:bill_name][0][:value]
+    bill_name.sub! /\s+bill$/, ''
     halt 400 if bill_name.nil?
     sql_query = <<-EOS
         SELECT bill_title, status
