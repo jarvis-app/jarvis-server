@@ -153,7 +153,12 @@ get '/query/:query' do
      EOS
     puts sql_query
     row = DB.query(sql_query).fetch_row
-    avg_price = ((row[0]).to_i)/100
+	if row.size == 0 || row[0].nil?
+		answer = "No Data found for #{commodity} in #{state}"
+		ap answer
+		return answer
+	end
+	avg_price = ((row[0]).to_i)/100
     answer = "The price for 1 Kilogram of #{commodity} is #{avg_price} Rupees"
     ap answer 
 
