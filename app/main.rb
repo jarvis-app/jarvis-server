@@ -18,7 +18,8 @@ get '/query/:query' do
     diseases: 'diseases',
     get_bill_count: 'bills',
     time_of_bill: 'bills',
-    bill_status: 'bills'
+    bill_status: 'bills',
+    get_sabzi_price: 'mandi_prices'
   }
 
   intent = wit[:intent].to_sym
@@ -138,6 +139,23 @@ get '/query/:query' do
     status = row[1].strip
     answer = templates[status.downcase] % title
     ap answer
+  
+  ## sabzi price
+  elsif intent == :get_sabzi_price
+    commodity = entities[:commodity] && entities[:commodity][0][:value]
+    state = entities[:state] && entities[:state][0][:value]
+    puts commodity
+    halt 400 if commodity.nil?
+    sql_query = <<-EOS
+      SELECT AVG(price)
+      FROM #{tables[intent]}
+      WHERE state = '#{state}' AND commodity LIKE '%#{commodity}%'
+     EOS
+    puts sql_query
+    row = DB.query(sql_query).fetch_row
+    avg_price = ((row[0]).to_i)/100
+    answer = "The price for 1 Kilogram of #{commodity} is #{avg_price} Rupees"
+    ap answer 
 
   else
     halt 400
