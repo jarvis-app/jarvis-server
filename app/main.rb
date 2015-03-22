@@ -84,6 +84,11 @@ get '/query/:query' do
       halt 400
     end
 
+    ministry = "1=1"
+    if entities[:ministry]
+      ministry = "ministry LIKE '%#{entities[:ministry][0][:value]}%'"
+    end
+
     extract_year = "EXTRACT(YEAR FROM #{date_col})"
 
     if entities[:datetime]
@@ -99,7 +104,7 @@ get '/query/:query' do
     sql_query = <<-EOS
         SELECT COUNT(*)
         FROM #{tables[intent]}
-        WHERE #{condition} AND #{condition2}
+        WHERE #{condition} AND #{condition2} AND #{ministry}
       EOS
     puts sql_query
 
