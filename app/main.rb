@@ -56,7 +56,9 @@ get '/query/:query' do
 
     answer_template = wit[:entities][:metric][0][:metadata]
     answer_template = "%s" if answer_template.empty?
-    answer = answer_template % [DB.query(sql_query).fetch_row[0]]
+    answer_val = DB.query(sql_query).fetch_row[0]
+    return "No Data found for #{disease} in #{state}" if answer_val.nil? or answer_val.empty?
+    answer = answer_template % [answer_val]
     ap answer
 
 
@@ -139,7 +141,7 @@ get '/query/:query' do
     status = row[1].strip
     answer = templates[status.downcase] % title
     ap answer
-  
+
   ## sabzi price
   elsif intent == :get_sabzi_price
     commodity = entities[:commodity] && entities[:commodity][0][:value]
@@ -160,7 +162,7 @@ get '/query/:query' do
 	end
 	avg_price = ((row[0]).to_i)/100
     answer = "The price for 1 Kilogram of #{commodity} is #{avg_price} Rupees"
-    ap answer 
+    ap answer
 
   else
     halt 400
