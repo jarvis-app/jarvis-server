@@ -9,8 +9,8 @@ get '/version' do
 end
 
 get '/query/:query' do
-  #wit_json = Wit.text_query(params[:query].gsub('Defaults', '').gsub('Default', ''), ACCESS_TOKEN)
-  wit_json = %x(#{CMD % [params[:query]]})
+  wit_json = Wit.text_query(params[:query].gsub('Defaults', '').gsub('Default', ''), ACCESS_TOKEN)
+  #wit_json = %x(#{CMD % [params[:query]]})
   ap wit_json
 
   wit = JSON.parse(wit_json, { symbolize_names: true })[:outcomes][0]
