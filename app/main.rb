@@ -58,7 +58,7 @@ get '/query/:query' do
     puts sql_query
 
     answer_template = wit[:entities][:metric][0][:metadata]
-    answer_template = "%s" if answer_template.empty?
+    answer_template = "%s" if answer_template.nil? or answer_template.empty?
     answer_val = DB.query(sql_query).fetch_row[0]
     if answer_val.nil? or answer_val.empty?
       return "No Data found for #{entities[:disease][0][:value]}"
@@ -118,7 +118,7 @@ get '/query/:query' do
     puts sql_query
 
     answer_template = wit[:entities][:metric][0][:metadata]
-    answer_template = "%s" if answer_template.empty?
+    answer_template = "%s" if answer_template.nil? or answer_template.empty?
     answer = answer_template % [DB.query(sql_query).fetch_row[0]]
     ap answer
 
